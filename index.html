@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>16 型人格星球 | 可愛又準的 MBTI 測驗</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="gradient-bg">
+      <div class="floating floating-one"></div>
+      <div class="floating floating-two"></div>
+      <div class="floating floating-three"></div>
+    </div>
+
+    <header class="hero">
+      <div class="hero__text">
+        <p class="eyebrow">幽默又準的 MBTI 測驗</p>
+        <h1>
+          16 型人格星球
+          <span class="sparkle">✨</span>
+        </h1>
+        <p class="lede">
+          題目超多、笑點滿滿，但結論依然犀利！填完就能知道你是
+          「咖啡機守護者」還是「超級社牛策展人」。
+        </p>
+        <div class="hero__cta">
+          <button class="btn primary" id="startBtn">開始答題</button>
+          <button class="btn ghost" id="scrollBtn">看看介紹</button>
+        </div>
+        <div class="badge-row">
+          <span class="badge">24 題精選</span>
+          <span class="badge">可愛設計</span>
+          <span class="badge">結果立即顯示</span>
+        </div>
+      </div>
+      <div class="hero__card">
+        <div class="card card--glass">
+          <p class="card__title">你的個性風味</p>
+          <p class="card__score">E / I · S / N · T / F · J / P</p>
+          <p class="card__hint">滑到下方開始作答，\n星球正在等你登陸！</p>
+          <div class="pill-grid">
+            <span class="pill">搞笑</span>
+            <span class="pill">務實</span>
+            <span class="pill">靈感</span>
+            <span class="pill">行動派</span>
+            <span class="pill">軟萌</span>
+            <span class="pill">冷靜</span>
+            <span class="pill">策展魂</span>
+            <span class="pill">溫柔貓系</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="container">
+      <section class="intro">
+        <div class="intro__text">
+          <h2>怎麼玩？</h2>
+          <p>
+            每一題都是生活場景，選出最符合你的反應。選項從「完全不是我」到「超級就是我」，分數會換算到四大維度，最終組成 16
+            型人格。準備好讓幽默感測出你的真性情了嗎？
+          </p>
+        </div>
+        <div class="intro__stats">
+          <div class="stat">
+            <span class="stat__number">24</span>
+            <span class="stat__label">趣味問題</span>
+          </div>
+          <div class="stat">
+            <span class="stat__number">16</span>
+            <span class="stat__label">人格結果</span>
+          </div>
+          <div class="stat">
+            <span class="stat__number">3</span>
+            <span class="stat__label">分鐘完成</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="quiz" id="quizSection">
+        <div class="quiz__header">
+          <div>
+            <p class="eyebrow">答題區</p>
+            <h2>開始測驗</h2>
+            <p>填完所有題目後按下「看結果」，星球會自動計算你的 MBTI。</p>
+            <p class="quiz__legend">
+              每題都有左、右兩種描述：越偏左代表越像左邊的敘述（例如 E），越偏右代表越像右邊的敘述（例如 I）。
+            </p>
+          </div>
+          <div class="progress">
+            <span id="progressCount">0 / 24</span>
+            <div class="progress__bar">
+              <div class="progress__fill" id="progressFill"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="quiz__grid" id="questionsContainer"></div>
+
+        <div class="quiz__actions">
+          <button class="btn ghost" id="resetBtn">清空重填</button>
+          <button class="btn primary" id="submitBtn">看結果</button>
+        </div>
+      </section>
+
+      <section class="result" id="resultSection">
+        <div class="result__card" id="resultCard">
+          <p class="eyebrow">你的測驗結果</p>
+          <div class="result__header">
+            <div>
+              <p class="result__label">人格類型</p>
+              <h3 id="resultType">尚未計算</h3>
+              <p class="result__tagline" id="resultTagline">填完題目就會揭曉！</p>
+            </div>
+            <div class="result__chip" id="resultEmoji">🌟</div>
+          </div>
+          <p class="result__description" id="resultDescription">
+            完成所有題目後，這裡會以暖心又犀利的口吻，告訴你是怎樣的星球旅人。
+          </p>
+          <div class="dimension-grid" id="dimensionGrid"></div>
+        </div>
+        <div class="result__aside">
+          <div class="card card--glass">
+            <p class="card__title">結果怎麼算？</p>
+            <ol class="card__list">
+              <li>每題用 5 級分數加權到 4 大維度。</li>
+              <li>比較分數高低決定字母，例如 E v.s. I。</li>
+              <li>組成 4 個字母，就得到你的 MBTI！</li>
+            </ol>
+            <p class="card__foot">幽默歸幽默，準確度我們也很在意。</p>
+          </div>
+          <div class="card card--accent">
+            <p class="card__title">友善提示</p>
+            <p class="card__body">
+              如果兩邊分數非常接近，代表你在不同情境中能彈性切換，是超級適應型選手。這也是很棒的能力！
+            </p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p>Made with ☕️ &amp; 🍰 · 祝你玩得開心，找到自己的星球！</p>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>

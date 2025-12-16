@@ -1,0 +1,470 @@
+const scaleOptions = [
+  { value: -2, label: "完全不是我", emoji: "😶" },
+  { value: -1, label: "有點不像", emoji: "🙂" },
+  { value: 0, label: "介於中間", emoji: "😌" },
+  { value: 1, label: "有點像", emoji: "😏" },
+  { value: 2, label: "超級就是我", emoji: "🤩" },
+];
+
+const questions = [
+  {
+    id: "q1",
+    axis: "EI",
+    prompt: "派對剛開場，你會怎麼做？",
+    left: "E：立刻加入舞池／跟大家打招呼",
+    right: "I：先觀察氣氛，找到角落放鬆",
+  },
+  {
+    id: "q2",
+    axis: "EI",
+    prompt: "群組訊息 99+，你的第一反應是？",
+    left: "E：邊滑邊回，想跟上討論",
+    right: "I：先靜音，過一陣子再整理回覆",
+  },
+  {
+    id: "q3",
+    axis: "EI",
+    prompt: "電梯裡遇到鄰居時",
+    left: "E：尬聊今日天氣或附近新店",
+    right: "I：點頭微笑致意就好",
+  },
+  {
+    id: "q4",
+    axis: "EI",
+    prompt: "週末時光通常是",
+    left: "E：揪團吃早午餐或戶外活動",
+    right: "I：獨處充電、追劇或閱讀",
+  },
+  {
+    id: "q5",
+    axis: "EI",
+    prompt: "陌生人問路，你",
+    left: "E：順便聊聊附近美食與推薦",
+    right: "I：講完路線就祝福對方順利",
+  },
+  {
+    id: "q6",
+    axis: "EI",
+    prompt: "被邀請上台分享",
+    left: "E：緊張但興奮，開始想梗",
+    right: "I：希望這輪不要叫到我",
+  },
+  {
+    id: "q7",
+    axis: "SN",
+    prompt: "做筆記時",
+    left: "S：畫表格寫重點、數據",
+    right: "N：寫滿小劇場與比喻",
+  },
+  {
+    id: "q8",
+    axis: "SN",
+    prompt: "看到路邊雲彩",
+    left: "S：猜今天大概會下雨",
+    right: "N：覺得那朵像飄走的甜甜圈",
+  },
+  {
+    id: "q9",
+    axis: "SN",
+    prompt: "新咖啡店開幕，你先看",
+    left: "S：價目、容量、咖啡豆介紹",
+    right: "N：店主的故事與裝潢靈感",
+  },
+  {
+    id: "q10",
+    axis: "SN",
+    prompt: "朋友提案新點子，你會",
+    left: "S：先問資料與流程怎麼收集",
+    right: "N：腦內已經看到未來盛況",
+  },
+  {
+    id: "q11",
+    axis: "SN",
+    prompt: "下載新 app",
+    left: "S：完整讀新手教學與設定",
+    right: "N：直接亂點探索，邊玩邊學",
+  },
+  {
+    id: "q12",
+    axis: "SN",
+    prompt: "做菜時",
+    left: "S：嚴格秤重、計時、照食譜",
+    right: "N：憑靈感加料，幻想料理魔法",
+  },
+  {
+    id: "q13",
+    axis: "TF",
+    prompt: "朋友遲到 20 分鐘",
+    left: "T：心裡排出效率分析與原因",
+    right: "F：先確認朋友是不是遇到狀況",
+  },
+  {
+    id: "q14",
+    axis: "TF",
+    prompt: "選電影時",
+    left: "T：看評分、導演、成本、題材",
+    right: "F：看心情與一起的人想怎麼感受",
+  },
+  {
+    id: "q15",
+    axis: "TF",
+    prompt: "同事抱怨工作",
+    left: "T：給出可執行的解法與清單",
+    right: "F：先陪對方吐槽、共感再想辦法",
+  },
+  {
+    id: "q16",
+    axis: "TF",
+    prompt: "收到批評留言",
+    left: "T：提煉可改進的要點",
+    right: "F：先需要抱抱或喝杯奶茶安撫",
+  },
+  {
+    id: "q17",
+    axis: "TF",
+    prompt: "決定今晚吃什麼",
+    left: "T：列 CP 值清單，算最划算的選項",
+    right: "F：想吃能讓心情好的那道菜",
+  },
+  {
+    id: "q18",
+    axis: "TF",
+    prompt: "看到路邊貓咪",
+    left: "T：觀察路線，避免打擾牠日常",
+    right: "F：立刻伸手跟牠聊天或撒嬌",
+  },
+  {
+    id: "q19",
+    axis: "JP",
+    prompt: "計畫旅行",
+    left: "J：行程表精準到 15 分鐘",
+    right: "P：只訂機票住宿，其他隨緣",
+  },
+  {
+    id: "q20",
+    axis: "JP",
+    prompt: "你的衣櫃狀態",
+    left: "J：分類整齊、標籤清楚",
+    right: "P：創意堆疊，找到靠第六感",
+  },
+  {
+    id: "q21",
+    axis: "JP",
+    prompt: "面對 Deadline",
+    left: "J：提前完成、反覆檢查",
+    right: "P：截止前一晚才進入超速模式",
+  },
+  {
+    id: "q22",
+    axis: "JP",
+    prompt: "好友臨時揪飯",
+    left: "J：先看行程表再決定",
+    right: "P：好啊，先吃再說",
+  },
+  {
+    id: "q23",
+    axis: "JP",
+    prompt: "靈感突然來時",
+    left: "J：寫入規劃清單，排到下一回合",
+    right: "P：立刻開工直到熱度退散",
+  },
+  {
+    id: "q24",
+    axis: "JP",
+    prompt: "週日夜晚，你通常",
+    left: "J：收拾桌面、列下週計畫",
+    right: "P：邊追劇邊想明天再整理",
+  },
+];
+
+const personalityDetails = {
+  INTJ: {
+    emoji: "🧠",
+    tagline: "策略腦袋 + 貓系冷靜",
+    description:
+      "你用高維度的邏輯拆解世界，對未來有自己的暗中藍圖。表面安靜，內心其實在進行華麗的流程優化。",
+  },
+  INTP: {
+    emoji: "🔍",
+    tagline: "理論派發明家",
+    description:
+      "你喜歡拆解事物的底層邏輯，對冷門知識有異常熱情。靈光乍現時可以連續講一小時，平時則像在背景編譯。",
+  },
+  ENTJ: {
+    emoji: "🚀",
+    tagline: "燃燒 KPI 的指揮官",
+    description:
+      "你擅長把混亂變成路線圖，能量十足且行動派。團隊需要方向的時候，你就是那道帶著表格的光。",
+  },
+  ENTP: {
+    emoji: "⚡️",
+    tagline: "段子手創新者",
+    description:
+      "你腦袋是無限腦洞生成器，喜歡辯論、拆梗、發明新玩法。世界是你的實驗場，玩得開心也玩得很快。",
+  },
+  INFJ: {
+    emoji: "🌙",
+    tagline: "溫柔的洞察家",
+    description:
+      "你能感受人心又能洞悉全局，對重要的人特別投入。你像夜燈，安靜卻讓人安心，幫大家找回方向。",
+  },
+  INFP: {
+    emoji: "🍰",
+    tagline: "夢想系故事創作者",
+    description:
+      "你重視價值與真誠，喜歡用文字、音樂或小卡片傳遞心意。你是行走的療癒系表情包，柔軟又有韌性。",
+  },
+  ENFJ: {
+    emoji: "🌟",
+    tagline: "社交場的策展人",
+    description:
+      "你擅長讓每個人都被看見，像主持人又像教練。情感雷達敏銳，總能把聚會變成溫暖的實境秀。",
+  },
+  ENFP: {
+    emoji: "🎈",
+    tagline: "靈感派冒險家",
+    description:
+      "好奇、熱情、充滿梗，你總能把平凡變有趣。你是團隊的彩色泡泡機，帶來新點子也帶來笑聲。",
+  },
+  ISTJ: {
+    emoji: "🗂️",
+    tagline: "默默守護的紀律王",
+    description:
+      "你務實、可靠，對細節有著強迫級的堅持。當大家散漫時，你就是那個讓計畫回到正軌的安定力量。",
+  },
+  ISFJ: {
+    emoji: "🫧",
+    tagline: "暖心的後勤隊長",
+    description:
+      "你細膩又貼心，總記得大家的小偏好。你是社群裡的防護罩，默默做好準備，讓別人安心做自己。",
+  },
+  ESTJ: {
+    emoji: "📣",
+    tagline: "行動派執行長",
+    description:
+      "你討厭拖延，喜歡明確規則與高效率。事情交到你手上，Excel、流程、里程碑瞬間就定位。",
+  },
+  ESFJ: {
+    emoji: "🧋",
+    tagline: "氛圍營造家",
+    description:
+      "你熱愛照顧他人，是聚會與群組裡的溫暖主持人。你把細節做到位，讓大家都被禮貌與奶茶包圍。",
+  },
+  ISTP: {
+    emoji: "🛠️",
+    tagline: "冷靜的修理師",
+    description:
+      "你喜歡親手拆解與解決問題，專注、俐落又獨立。表面酷酷的，其實已經悄悄修好了螺絲與 Bug。",
+  },
+  ISFP: {
+    emoji: "🌸",
+    tagline: "感受派藝術魂",
+    description:
+      "你用感官體驗世界，熱愛美感與真實。你像春日微風，柔軟細膩，身上有故事也有溫度。",
+  },
+  ESTP: {
+    emoji: "🏄‍♀️",
+    tagline: "臨場發揮冠軍",
+    description:
+      "你反應快、敢冒險，最愛即興挑戰。當場景需要火力與幽默，你會直接把現場變成綜藝節目。",
+  },
+  ESFP: {
+    emoji: "🎉",
+    tagline: "社交場的亮片",
+    description:
+      "你是活體歡樂製造機，擅長把日常變秀場。你溫暖又外向，總能讓尷尬瞬間化成大笑。",
+  },
+};
+
+const questionsContainer = document.getElementById("questionsContainer");
+const progressCount = document.getElementById("progressCount");
+const progressFill = document.getElementById("progressFill");
+const submitBtn = document.getElementById("submitBtn");
+const resetBtn = document.getElementById("resetBtn");
+const startBtn = document.getElementById("startBtn");
+const scrollBtn = document.getElementById("scrollBtn");
+const quizSection = document.getElementById("quizSection");
+const resultType = document.getElementById("resultType");
+const resultTagline = document.getElementById("resultTagline");
+const resultDescription = document.getElementById("resultDescription");
+const resultEmoji = document.getElementById("resultEmoji");
+const dimensionGrid = document.getElementById("dimensionGrid");
+
+function renderQuestions() {
+  const fragment = document.createDocumentFragment();
+
+  questions.forEach((q, index) => {
+    const card = document.createElement("article");
+    card.className = "question";
+    card.id = q.id;
+    card.dataset.axis = q.axis;
+
+    const title = document.createElement("div");
+    title.className = "question__title";
+    title.innerHTML = `<span>Q${index + 1}. ${q.prompt}</span><span class="scale-text">${q.axis[0]} ↔ ${q.axis[1]}</span>`;
+
+    const axes = document.createElement("div");
+    axes.className = "question__axes";
+    axes.innerHTML = `
+      <span class="axis-chip axis-chip--left">${q.axis[0]}｜${q.left}</span>
+      <span class="axis-chip axis-chip--right">${q.axis[1]}｜${q.right}</span>
+    `;
+
+    const options = document.createElement("div");
+    options.className = "options";
+
+    scaleOptions.forEach((opt) => {
+      const option = document.createElement("label");
+      option.className = "option";
+
+      option.innerHTML = `
+        <input type="radio" id="${q.id}-${opt.value}" name="${q.id}" value="${opt.value}">
+        <span class="option__text">${opt.emoji} ${opt.label}</span>
+      `;
+
+      const input = option.querySelector("input");
+      input.addEventListener("change", updateProgress);
+      options.appendChild(option);
+    });
+
+    card.appendChild(title);
+    card.appendChild(axes);
+    card.appendChild(options);
+    fragment.appendChild(card);
+  });
+
+  questionsContainer.appendChild(fragment);
+}
+
+function updateProgress() {
+  const answered = questions.filter((q) =>
+    document.querySelector(`input[name="${q.id}"]:checked`)
+  ).length;
+  progressCount.textContent = `${answered} / ${questions.length}`;
+  const percent = Math.round((answered / questions.length) * 100);
+  progressFill.style.width = `${percent}%`;
+}
+
+function collectScores() {
+  const scores = { E: 0, I: 0, S: 0, N: 0, T: 0, F: 0, J: 0, P: 0 };
+
+  for (const q of questions) {
+    const chosen = document.querySelector(`input[name="${q.id}"]:checked`);
+    if (!chosen) continue;
+
+    const value = Number(chosen.value);
+    const [pos, neg] = q.axis.split("");
+    if (value >= 0) {
+      scores[pos] += value;
+    } else {
+      scores[neg] += Math.abs(value);
+    }
+  }
+
+  return scores;
+}
+
+function pickType(scores) {
+  const pairs = [
+    ["E", "I"],
+    ["S", "N"],
+    ["T", "F"],
+    ["J", "P"],
+  ];
+
+  return pairs
+    .map(([a, b]) => (scores[a] >= scores[b] ? a : b))
+    .join("");
+}
+
+function renderDimensions(scores) {
+  dimensionGrid.innerHTML = "";
+  const pairs = [
+    ["E", "I", "外向", "內向"],
+    ["S", "N", "感官", "直覺"],
+    ["T", "F", "思考", "情感"],
+    ["J", "P", "計畫", "彈性"],
+  ];
+
+  pairs.forEach(([a, b, labelA, labelB]) => {
+    const total = Math.max(scores[a] + scores[b], 1);
+    const percentA = Math.round((scores[a] / total) * 100);
+    const percentB = 100 - percentA;
+
+    const block = document.createElement("div");
+    block.className = "dimension";
+    block.innerHTML = `
+      <p class="dimension__label">${a}/${b} · ${labelA} vs ${labelB}</p>
+      <div class="dimension__bar">
+        <div class="dimension__fill" style="width:${percentA}%"></div>
+      </div>
+      <p class="scale-text">${a}: ${percentA}% · ${b}: ${percentB}%</p>
+    `;
+    dimensionGrid.appendChild(block);
+  });
+}
+
+function showResult() {
+  const scores = collectScores();
+  const type = pickType(scores);
+  const detail = personalityDetails[type];
+
+  resultType.textContent = type;
+  if (detail) {
+    resultTagline.textContent = detail.tagline;
+    resultDescription.textContent = detail.description;
+    resultEmoji.textContent = detail.emoji;
+  } else {
+    resultTagline.textContent = "你的組合很少見！";
+    resultDescription.textContent =
+      "你在四個維度的平衡度很接近，代表你能在不同場景之間自如切換。";
+    resultEmoji.textContent = "🌈";
+  }
+
+  renderDimensions(scores);
+  resultType.scrollIntoView({ behavior: "smooth", block: "center" });
+}
+
+function handleSubmit() {
+  const unanswered = questions.filter(
+    (q) => !document.querySelector(`input[name="${q.id}"]:checked`)
+  );
+
+  if (unanswered.length) {
+    const first = unanswered[0];
+    const card = document.querySelector(`#${first.id}`) || questionsContainer;
+    card.scrollIntoView({ behavior: "smooth", block: "center" });
+    alert("還有題目沒填喔！請完成所有題目再看結果。");
+    return;
+  }
+
+  showResult();
+}
+
+function handleReset() {
+  document.querySelectorAll('input[type="radio"]').forEach((el) => {
+    el.checked = false;
+  });
+  updateProgress();
+  resultType.textContent = "尚未計算";
+  resultTagline.textContent = "填完題目就會揭曉！";
+  resultDescription.textContent =
+    "完成所有題目後，這裡會以暖心又犀利的口吻，告訴你是怎樣的星球旅人。";
+  resultEmoji.textContent = "🌟";
+  dimensionGrid.innerHTML = "";
+}
+
+function smoothScrollToQuiz() {
+  quizSection.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+function init() {
+  renderQuestions();
+  updateProgress();
+  submitBtn.addEventListener("click", handleSubmit);
+  resetBtn.addEventListener("click", handleReset);
+  startBtn.addEventListener("click", smoothScrollToQuiz);
+  scrollBtn.addEventListener("click", smoothScrollToQuiz);
+}
+
+document.addEventListener("DOMContentLoaded", init);
